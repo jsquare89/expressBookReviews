@@ -2,6 +2,7 @@ const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
+let axios = require("axios");
 const public_users = express.Router();
 
 
@@ -25,6 +26,7 @@ public_users.get('/',function (req, res) {
   //Write your code here
   return res.status(300).json(books);
 });
+
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
@@ -51,3 +53,42 @@ public_users.get('/review/:isbn',function (req, res) {
 });
 
 module.exports.general = public_users;
+
+
+async function getAllBooks() {
+    try {
+        const response = await axios.get('/');
+        const books = response.data;
+        return books;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function getBookByISBN(isbn) {
+    try {
+      const response = await axios.get(`/isbn/${isbn}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  async function getBooksByAuthor(author) {
+    try {
+      const response = await axios.get(`/author/${author}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
+  async function getBooksByTitle(title) {
+    try {
+      const response = await axios.get(`/title/${title}`);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
